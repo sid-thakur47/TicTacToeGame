@@ -34,3 +34,32 @@ function tossForPlayer() {
 			echo "Computer is playing"
 		fi
 }
+
+function displayGame() {
+	index=1
+	echo "---------------"
+	for ((i=1;i<=3;i++))
+	do
+		for ((j=1;j<=3;j++))
+		do
+			test=${dictTicTacToe[$index]}
+			printf "| $test |"
+			((index++))
+		done
+		printf "\n"
+	done
+	echo "---------------"
+}
+function playTicTacToe() {
+	resetBoard
+	tossForPlayer
+	chooseSymbol
+	while [[ $check -ne $LAST_POSITION ]]
+	do
+		read -p "Enter the position:" position
+		dictTicTacToe[$position]=$playerSymbol
+		displayGame
+		((check++))
+	done	
+}
+playTicTacToe
