@@ -10,3 +10,16 @@ function resetBoard() {
 		dictTicTacToe[$i]=$i
 	done
 }
+
+function chooseSymbol() {
+	read -p "Enter X or O to choose your symbol:" symbol
+		if [ $symbol == "x" ]
+		then
+			playerSymbol=x
+			computerSymbol=o
+		else
+			playerSymbol=o
+			computerSymbol=x
+		fi
+		echo -e "player symbol is:$playerSymbol\nComputer Symbol is $computerSymbol"
+}
