@@ -23,3 +23,14 @@ function chooseSymbol() {
 		fi
 		echo -e "player symbol is:$playerSymbol\nComputer Symbol is $computerSymbol"
 }
+
+function tossForPlayer() {
+	read -p "Press Enter for toss:" key
+	rand=$(($((RANDOM%2))+1))
+		if [ $rand -eq 1 ]
+		then
+			echo "Player is playing"
+		else
+			echo "Computer is playing"
+		fi
+}
