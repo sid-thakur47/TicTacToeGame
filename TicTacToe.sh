@@ -21,5 +21,5 @@ function chooseSymbol() {
 			playerSymbol=o
 			computerSymbol=x
 		fi
-		echo -e "player symbol is:$playerSymbol\nComputer Symbol is $computerSymbol"
+	echo -e "player symbol is:$playerSymbol\nComputer Symbol is $computerSymbol"
 }
