@@ -71,16 +71,16 @@ function displayGame() {
 			checkWinner
 			dictTicTacToe[$k]=$k
 		fi
-		if [ $check -eq 0 ]
-		then
-			position=$k
-			break
-		fi	
+			if [ $check -eq 0 ]
+			then
+				position=$k
+				break
+			fi	
 	done
-		if [ $check -ne 0 ]
-		then
-			position=$(($(($RANDOM%9))+1))
-		fi
+			if [ $check -ne 0 ]
+			then
+				position=$(($(($RANDOM%9))+1))
+			fi
 }
 function playerMoves() {
 	echo "Player is playing"
@@ -93,14 +93,14 @@ function getPlayerTurn() {
 	if [[ $count%2 -eq 0 ]]
 	then
 		playerMoves
-		else 
+	else 
 		computerMoves
 	fi
 	checkPosition
-	if [[ checkPositionFlag  -eq 0 ]]
-	then
-		getPlayerTurn
-	fi
+		if [[ checkPositionFlag  -eq 0 ]]
+		then
+			getPlayerTurn
+		fi
 }
 
 function checkPosition() {
