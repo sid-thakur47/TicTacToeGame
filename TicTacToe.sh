@@ -1,3 +1,5 @@
+#!/bin/bash
+
 declare -A dictTicTacToe
 
 LAST_POSITION=9
@@ -57,19 +59,42 @@ function displayGame() {
 	echo "---------------"
 	printf "\n"
 }
+ function computerMoves() {
+	echo "Computer Played"
+	currentPlayer=computer
+	currentSymbol=$computerSymbol
+	for k in ${dictTicTacToe[*]}
+	do 		
+		if [[ ${dictTicTacToe[$k]} -ne $playerSymbol ]] || [[ ${dictTicTacToe[$k]} -ne $computerSymbol ]]
+		then
+			dictTicTacToe[$k]=$computerSymbol
+			checkWinner
+			dictTicTacToe[$k]=$k
+		fi
+		if [ $check -eq 0 ]
+		then
+			position=$k
+			break
+		fi	
+	done
+		if [ $check -ne 0 ]
+		then
+			position=$(($(($RANDOM%9))+1))
+		fi
+}
+function playerMoves() {
+	echo "Player is playing"
+	currentPlayer=player
+	currentSymbol=$playerSymbol
+	read -p "Enter the position:" position
+}
 
 function getPlayerTurn() {
 	if [[ $count%2 -eq 0 ]]
 	then
-		echo "Player is playing"
-		currentPlayer=player
-		currentSymbol=$playerSymbol
-		read -p "Enter the position:" position
-	else 
-		echo "Computer Played"
-		currentPlayer=computer
-		currentSymbol=$computerSymbol
-		position=$(($(($RANDOM%9))+1))
+		playerMoves
+		else 
+		computerMoves
 	fi
 	checkPosition
 	if [[ checkPositionFlag  -eq 0 ]]
@@ -77,6 +102,7 @@ function getPlayerTurn() {
 		getPlayerTurn
 	fi
 }
+
 function checkPosition() {
 	if [[ ${dictTicTacToe[$position]} == $computerSymbol ]] || [[ ${dictTicTacToe[$position]} == $playerSymbol ]]
 	then
@@ -85,8 +111,8 @@ function checkPosition() {
 	else
 		checkPositionFlag=1	
 	fi
-	
 }
+
 function playTicTacToe() {
 	resetBoard
 	tossForPlayer
@@ -138,7 +164,6 @@ function checkDiagonal() {
 		echo "$currentPlayer is winner"
 	fi
 }
-
 function checkForTie() {
 	checkTie=$(($checkTie+1))
 		if [[ $checkTie -eq $LAST_POSITION ]]
