@@ -63,10 +63,10 @@ function displayGame() {
 function blocksPlayerPosition(){
 	if [[ $checkWinnerFlag -ne 0 ]] && [[ $currentSymbol == $computerSymbol ]] 
 	then
-		currentSymbol=$playerSymbol			#Temperory change computer turn to Player turn to check player winning probability
-		checkMovesForWinningPosition		#Checking if player is winning or not in next turn
-		currentSymbol=$computerSymbol		#Roll backing temperory player turn to computer turn
-		checkWinnerFlag=1						#Resttting chekWinner flag to 1
+		currentSymbol=$playerSymbol			
+		checkMovesForWinningPosition		
+		currentSymbol=$computerSymbol		
+		checkWinnerFlag=1
 	fi
 }
 
@@ -75,9 +75,9 @@ function blocksPlayerPosition(){
 	do 
 		if [[ ${dictTicTacToe[$k]} -ne $playerSymbol ]] || [[ ${dictTicTacToe[$k]} -ne $computerSymbol ]]
 		then
-			dictTicTacToe[$k]=$currentSymbol #Temperory assign position
-			checkWinner 					 #Assign temperory poistion and check winning probability
-			dictTicTacToe[$k]=$k 			 #Rollback temperory position
+			dictTicTacToe[$k]=$currentSymbol 
+			checkWinner 					 
+			dictTicTacToe[$k]=$k 			 
 		fi
 			if [ $checkWinnerFlag -eq 0 ]
 			then
