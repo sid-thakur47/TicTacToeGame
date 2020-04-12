@@ -88,7 +88,7 @@ function blocksPlayerPosition(){
 				blockingFlag=0
 				break
 			fi
-		done		
+	done		
 }
 
 function playerMoves() {
@@ -142,6 +142,7 @@ function playTicTacToe() {
 		getPlayerTurn
 		blocksPlayerPosition
 		checkCorners
+		checkMiddle
 		dictTicTacToe[$position]=$currentSymbol
 		displayGame
 		checkWinner
@@ -197,15 +198,38 @@ function checkForTie() {
 function checkCorners() {
 	if [[ $checkWinnerFlag -ne 0 ]] && [[ $currentSymbol == $computerSymbol ]] && [[ $blockingFlag == 1 ]]
 	then
-	
-	for ((i=0;i<${#arrCorner[*]};i++))
+		checkCornerFlag=1
+		for ((i=0;i<${#arrCorner[*]};i++))
 		do
 			j=${arrCorner[$i]}
 			if [[ ${dictTicTacToe[$j]} -ne $playerSymbol ]] || [[ ${dictTicTacToe[$j]} -ne $computerSymbol ]]
 			then
 				position=$j
+				checkCornerFlag=0
 			fi
 		done
+			if [[ $checkCornerFlag == 1 ]]
+			then	
+				echo "No corners Avaialble"
+				exit 1
+			fi
+	fi
+}
+
+function checkMiddle() {
+	if [[ $checkWinnerFlag -ne 0 ]] && [[ $currentSymbol == $computerSymbol ]] && [[ $blockingFlag == 1 ]] && [[ $checkCornerFlag == 1 ]]
+	then
+		checkMiddleFlag=1
+		if [[ ${dictTicTacToe[5]} -ne $playerSymbol ]] || [[ ${dictTicTacToe[5]} -ne $computerSymbol ]]
+			then
+				position=5
+				checkMiddleFlag=0
+		fi
+			if [[ $checkMiddleFlag == 1 ]]
+			then	
+				echo "No Middle postion Avaialble"
+				exit 1
+			fi
 	fi
 }
 
