@@ -4,8 +4,9 @@ declare -A dictTicTacToe
 
 LAST_POSITION=9
 
+blockingFlag=1
 checkWinnerFlag=1
-checkWinnerTie=0
+checkTie=0
 count=0
 arrRow=(1 4 7)
 arrColumn=(1 2 3)
@@ -74,6 +75,7 @@ function blocksPlayerPosition(){
  function checkMovesForWinningPosition() {
 	for k in ${dictTicTacToe[*]}
 	do 
+	blockingFlag=1
 		if [[ ${dictTicTacToe[$k]} -ne $playerSymbol ]] || [[ ${dictTicTacToe[$k]} -ne $computerSymbol ]]
 		then
 			dictTicTacToe[$k]=$currentSymbol 
@@ -83,6 +85,7 @@ function blocksPlayerPosition(){
 			if [ $checkWinnerFlag -eq 0 ]
 			then
 				position=$k
+				blockingFlag=0
 				break
 			fi
 	done		
@@ -183,8 +186,8 @@ function checkWinnerDiagonal() {
 	fi
 }
 function checkForTie() {
-	checkWinnerTie=$(($checkWinnerTie+1))
-		if [[ $checkWinnerTie -eq $LAST_POSITION ]]
+	checkTie=$(($checkTie+1))
+		if [[ $checkTie -eq $LAST_POSITION ]]
 		then
 			echo "Game is Tie"
 			checkWinnerFlag=0
@@ -192,16 +195,23 @@ function checkForTie() {
 }
 
 function checkCorners() {
-	if [[ $checkWinnerFlag -ne 0 ]] && [[ $currentSymbol == $computerSymbol ]] 
+	if [[ $checkWinnerFlag -ne 0 ]] && [[ $currentSymbol == $computerSymbol ]] && [[ $blockingFlag == 1 ]]
 	then
+		checkCornerFlag=1
 		for ((i=0;i<${#arrCorner[*]};i++))
-			do
-				j=${arrCorner[$i]}
-				if [[ ${dictTicTacToe[$j]} -ne $playerSymbol ]] || [[ ${dictTicTacToe[$j]} -ne $computerSymbol ]]
-				then
-					position=$j
-				fi
-			done
+		do
+			j=${arrCorner[$i]}
+			if [[ ${dictTicTacToe[$j]} -ne $playerSymbol ]] || [[ ${dictTicTacToe[$j]} -ne $computerSymbol ]]
+			then
+				position=$j
+				checkCornerFlag=0
+			fi
+		done
+			if [[ $checkCornerFlag == 1 ]]
+			then	
+				echo "No corners Avaialble"
+				exit 1
+			fi
 	fi
 }
 
