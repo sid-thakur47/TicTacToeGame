@@ -9,6 +9,7 @@ checkWinnerTie=0
 count=0
 arrRow=(1 4 7)
 arrColumn=(1 2 3)
+arrCorner=(1 3 7 9)
 
 function resetBoard() {
 	for ((i=1;i<=$LAST_POSITION;i++))
@@ -23,10 +24,10 @@ function tossForPlayer() {
 		if [ $rand -eq 1 ]
 		then
 			echo "Player is playing"
-			count=2
+			count=2;
 		else 
 			echo "Computer is playing"
-			count=1
+			count=1;
 		fi
 }
 
@@ -66,7 +67,7 @@ function blocksPlayerPosition(){
 		currentSymbol=$playerSymbol			
 		checkMovesForWinningPosition		
 		currentSymbol=$computerSymbol		
-		checkWinnerFlag=1
+		checkWinnerFlag=1						
 	fi
 }
 
@@ -137,6 +138,7 @@ function playTicTacToe() {
 	do
 		getPlayerTurn
 		blocksPlayerPosition
+		checkCorners
 		dictTicTacToe[$position]=$currentSymbol
 		displayGame
 		checkWinner
@@ -187,6 +189,20 @@ function checkForTie() {
 			echo "Game is Tie"
 			checkWinnerFlag=0
 		fi
+}
+
+function checkCorners() {
+	if [[ $checkWinnerFlag -ne 0 ]] && [[ $currentSymbol == $computerSymbol ]] 
+	then
+		for ((i=0;i<${#arrCorner[*]};i++))
+			do
+				j=${arrCorner[$i]}
+				if [[ ${dictTicTacToe[$j]} -ne $playerSymbol ]] || [[ ${dictTicTacToe[$j]} -ne $computerSymbol ]]
+				then
+					position=$j
+				fi
+			done
+	fi
 }
 
 function checkWinner(){
