@@ -4,7 +4,6 @@ declare -A dictTicTacToe
 
 LAST_POSITION=9
 
-blockingFlag=1
 checkWinnerFlag=1
 checkTie=0
 count=0
@@ -66,7 +65,6 @@ function blocksPlayerPosition(){
 	if [[ $checkWinnerFlag -ne 0 ]] && [[ $currentSymbol == $computerSymbol ]] 
 	then
 		currentSymbol=$playerSymbol			
-		checkMovesForWinningPosition		
 		currentSymbol=$computerSymbol		
 		checkWinnerFlag=1						
 	fi
@@ -142,6 +140,7 @@ function playTicTacToe() {
 		getPlayerTurn
 		blocksPlayerPosition
 		checkCorners
+		checkMiddle
 		dictTicTacToe[$position]=$currentSymbol
 		displayGame
 		checkWinner
@@ -197,15 +196,26 @@ function checkForTie() {
 function checkCorners() {
 	if [[ $checkWinnerFlag -ne 0 ]] && [[ $currentSymbol == $computerSymbol ]] && [[ $blockingFlag == 1 ]]
 	then
-	
-	for ((i=0;i<${#arrCorner[*]};i++))
-		do
-			j=${arrCorner[$i]}
-			if [[ ${dictTicTacToe[$j]} -ne $playerSymbol ]] || [[ ${dictTicTacToe[$j]} -ne $computerSymbol ]]
-			then
-				position=$j
-			fi
+	cornerFlag=1
+		for ((i=0;i<${#arrCorner[*]};i++))
+			do
+				j=${arrCorner[$i]}
+				if [[ ${dictTicTacToe[$j]} -ne $playerSymbol ]] || [[ ${dictTicTacToe[$j]} -ne $computerSymbol ]]
+				then
+					position=$j
+					cornerFlag=0
+				fi
 		done
+	fi
+}
+
+function checkMiddle() {
+	if [[ $checkWinnerFlag -ne 0 ]] && [[ $currentSymbol == $computerSymbol ]] && [[ $blockingFlag == 1 ]] && [[ $cornerFlag == 1 ]]
+	then
+		if [[ ${dictTicTacToe[5]} -ne $playerSymbol ]] || [[ ${dictTicTacToe[5]} -ne $computerSymbol ]]
+		then	
+			position=5
+		fi
 	fi
 }
 
