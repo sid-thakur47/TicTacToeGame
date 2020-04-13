@@ -138,13 +138,13 @@ function checkCorners() {
 	then
 	cornerFlag=1
 		for ((i=0;i<${#arrCorner[*]};i++))
-			do
-				j=${arrCorner[$i]}
-				if [[ ${dictTicTacToe[$j]} -ne $playerSymbol ]] || [[ ${dictTicTacToe[$j]} -ne $computerSymbol ]]
-				then
-					position=$j
-					cornerFlag=0
-				fi
+		do
+			j=${arrCorner[$i]}
+			if [[ ${dictTicTacToe[$j]} -ne $playerSymbol ]] || [[ ${dictTicTacToe[$j]} -ne $computerSymbol ]]
+			then
+				position=$j
+				cornerFlag=0
+			fi
 		done
 	fi
 }
