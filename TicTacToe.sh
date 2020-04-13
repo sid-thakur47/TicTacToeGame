@@ -4,8 +4,9 @@ declare -A dictTicTacToe
 
 LAST_POSITION=9
 
+blockingFlag=1
 checkWinnerFlag=1
-checkTie=0
+checkWinnerTie=0
 count=0
 arrRow=(1 4 7)
 arrColumn=(1 2 3)
@@ -16,19 +17,6 @@ function resetBoard() {
 	do 
 		dictTicTacToe[$i]=$i
 	done
-}
-
-function tossForPlayer() {
-	read -p "Press Enter for toss:" key
-	rand=$(($((RANDOM%2))+1))
-		if [ $rand -eq 1 ]
-		then
-			echo "Player is playing"
-			count=2;
-		else 
-			echo "Computer is playing"
-			count=1;
-		fi
 }
 
 function chooseSymbol() {
@@ -61,48 +49,16 @@ function displayGame() {
 	printf "\n"
 }
 
-function blocksPlayerPosition(){
-	if [[ $checkWinnerFlag -ne 0 ]] && [[ $currentSymbol == $computerSymbol ]] 
-	then
-		currentSymbol=$playerSymbol			
-		currentSymbol=$computerSymbol		
-		checkWinnerFlag=1						
-	fi
-}
-
- function checkMovesForWinningPosition() {
-	for k in ${dictTicTacToe[*]}
-	do 
-	blockingFlag=1
-		if [[ ${dictTicTacToe[$k]} -ne $playerSymbol ]] || [[ ${dictTicTacToe[$k]} -ne $computerSymbol ]]
+function tossForPlayer() {
+	read -p "Press Enter for toss:" key
+	rand=$(($((RANDOM%2))+1))
+		if [ $rand -eq 1 ]
 		then
-			dictTicTacToe[$k]=$currentSymbol 
-			checkWinner 					 
-			dictTicTacToe[$k]=$k 			 
-		fi
-			if [ $checkWinnerFlag -eq 0 ]
-			then
-				position=$k
-				blockingFlag=0
-				break
-			fi
-		done		
-}
-
-function playerMoves() {
-	echo "Player is playing"
-	currentPlayer=player
-	currentSymbol=$playerSymbol
-	read -p "Enter the position:" position
-}
-function computerMoves() {
-	echo "Computer Played"
-	currentPlayer=computer
-	currentSymbol=$computerSymbol
-	checkMovesForWinningPosition
-		if [ $checkWinnerFlag -ne 0 ]
-		then
-			position=$(($(($RANDOM%9))+1))
+			echo "Player is playing"
+			count=2;
+		else 
+			echo "Computer is playing"
+			count=1;
 		fi
 }
 
@@ -130,67 +86,51 @@ function checkWinnerPosition() {
 	fi
 }
 
-function playTicTacToe() {
-	resetBoard
-	tossForPlayer
-	chooseSymbol
-	displayGame
-	while [[ $checkWinnerFlag -ne 0 ]]
-	do
-		getPlayerTurn
-		blocksPlayerPosition
-		checkCorners
-		checkMiddle
-		dictTicTacToe[$position]=$currentSymbol
-		displayGame
-		checkWinner
-		checkForTie
-		((count++))
-	done	
+function playerMoves() {
+	echo "Player is playing"
+	currentPlayer=player
+	currentSymbol=$playerSymbol
+	read -p "Enter the position:" position
 }
 
-function checkWinnerRow() {
-	for ((i=0;i<${#arrRow[*]};i++))
-	do
-		j=${arrRow[$i]}
-		if [[ ${dictTicTacToe[$j]} == ${dictTicTacToe[$(($j+1))]} ]] && [[ ${dictTicTacToe[$(($j+1))]} == ${dictTicTacToe[$(($j+2))]} ]]
-		then 
-			checkWinnerFlag=0
-			echo "$currentPlayer is winner"
-		fi
-	done
-}
-
-function checkWinnerColumn() {
-	for ((i=0;i<${#arrColumn[*]};i++))
-	do
-		j=${arrColumn[$i]}
-		if [[ ${dictTicTacToe[$j]} == ${dictTicTacToe[$(($j+3))]} ]] && [[ ${dictTicTacToe[$(($j+3))]} == ${dictTicTacToe[$(($j+6))]} ]]
-		then 
-			checkWinnerFlag=0
-			echo "$currentPlayer is winner"
-		fi
-	done
-}
-
-function checkWinnerDiagonal() {
-	if [[ ${dictTicTacToe[1]} == ${dictTicTacToe[5]} ]] && [[ ${dictTicTacToe[5]} == ${dictTicTacToe[9]} ]]
-	then 
-		checkWinnerFlag=0
-		echo "${dictTicTacToe[1]} is winner"
-	elif [[ ${dictTicTacToe[3]} == ${dictTicTacToe[5]} ]] && [[ ${dictTicTacToe[5]} == ${dictTicTacToe[7]} ]]
-	then
-		checkWinnerFlag=0
-		echo "$currentPlayer is winner"
-	fi
-}
-function checkForTie() {
-	checkTie=$(($checkTie+1))
-		if [[ $checkTie -eq $LAST_POSITION ]]
+function computerMoves() {
+	echo "Computer Played"
+	currentPlayer=computer
+	currentSymbol=$computerSymbol
+	checkMovesForWinningPosition
+		if [ $checkWinnerFlag -ne 0 ]
 		then
-			echo "Game is Tie"
-			checkWinnerFlag=0
+			position=$(($(($RANDOM%9))+1))
 		fi
+}
+
+function checkMovesForWinningPosition() {
+	for k in ${dictTicTacToe[*]}
+	do 
+	blockingFlag=1
+		if [[ ${dictTicTacToe[$k]} -ne $playerSymbol ]] || [[ ${dictTicTacToe[$k]} -ne $computerSymbol ]]
+		then
+			dictTicTacToe[$k]=$currentSymbol 
+			checkWinner 					 
+			dictTicTacToe[$k]=$k 			 
+		fi
+			if [ $checkWinnerFlag -eq 0 ]
+			then
+				position=$k
+				blockingFlag=0
+				break
+			fi
+	done		
+}
+
+function blocksPlayerPosition(){
+	if [[ $checkWinnerFlag -ne 0 ]] && [[ $currentSymbol == $computerSymbol ]] 
+	then
+		currentSymbol=$playerSymbol			
+		checkMovesForWinningPosition		
+		currentSymbol=$computerSymbol		
+		checkWinnerFlag=1					
+	fi
 }
 
 function checkCorners() {
@@ -223,5 +163,69 @@ function checkWinner(){
 	checkWinnerRow
 	checkWinnerColumn
 	checkWinnerDiagonal
+}
+
+function checkForTie() {
+	checkTie=$(($checkTie+1))
+		if [[ $checkTie -eq $LAST_POSITION ]]
+		then
+			echo "Game is Tie"
+			checkWinnerFlag=0
+		fi
+}
+
+function checkWinnerRow() {
+	for ((i=0;i<${#arrRow[*]};i++))
+	do
+		j=${arrRow[$i]}
+		if [[ ${dictTicTacToe[$j]} == ${dictTicTacToe[$(($j+1))]} ]] && [[ ${dictTicTacToe[$(($j+1))]} == ${dictTicTacToe[$(($j+2))]} ]]
+		then 
+			checkWinnerFlag=0
+			echo "$currentPlayer is winner"
+		fi
+	done
+}
+
+function checkWinnerColumn() {
+	for ((i=0;i<${#arrColumn[*]};i++))
+	do
+		j=${arrColumn[$i]}
+		if [[ ${dictTicTacToe[$j]} == ${dictTicTacToe[$(($j+3))]} ]] && [[ ${dictTicTacToe[$(($j+3))]} == ${dictTicTacToe[$(($j+6))]} ]]
+		then 
+			checkWinnerFlag=0
+			echo "$currentPlayer is winner"
+		fi
+	done
+}
+
+function checkWinnerDiagonal() {
+	if [[ ${dictTicTacToe[1]} == ${dictTicTacToe[5]} ]] && [[ ${dictTicTacToe[5]} == ${dictTicTacToe[9]} ]]
+	then 
+		checkWinnerFlag=0
+		echo "$currentPlayer is winner"
+	elif [[ ${dictTicTacToe[3]} == ${dictTicTacToe[5]} ]] && [[ ${dictTicTacToe[5]} == ${dictTicTacToe[7]} ]]
+	then
+		checkWinnerFlag=0
+		echo "$currentPlayer is winner"
+	fi
+}
+
+function playTicTacToe() {
+	resetBoard
+	tossForPlayer
+	chooseSymbol
+	displayGame
+	while [[ $checkWinnerFlag -ne 0 ]]
+	do
+		getPlayerTurn
+		blocksPlayerPosition
+		checkCorners
+		checkMiddle
+		dictTicTacToe[$position]=$currentSymbol
+		displayGame
+		checkWinner
+		checkForTie
+		((count++))
+	done	
 }
  playTicTacToe
