@@ -221,7 +221,7 @@ function checkWinnerDiagonal() {
 	fi
 }
 
-function playTicTacToe() {
+function main() {
 	resetBoard
 	tossForPlayer
 	chooseSymbol
@@ -239,4 +239,4 @@ function playTicTacToe() {
 		((count++))
 	done	
 }
- playTicTacToe
+ main
