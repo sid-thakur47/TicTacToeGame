@@ -31,7 +31,7 @@ function chooseSymbol() {
 			playerSymbol=o
 			computerSymbol=x
 		fi
-	echo -e "player symbol is:$playerSymbol\nComputer Symbol is $computerSymbol\n"
+	echo -e "\nplayer symbol is:$playerSymbol\nComputer symbol is:$computerSymbol\n"
 }
 
 function displayGame() {
@@ -52,14 +52,15 @@ function displayGame() {
 }
 
 function tossForPlayer() {
-	read -p "Press Enter for toss:" key
+	echo "Press Enter for toss:"
+	read key
 	rand=$(($((RANDOM%2))+1))
 		if [ $rand -eq 1 ]
 		then
-			echo "Player is playing"
+			echo "Player won the toss and will play first"
 			count=2;
 		else 
-			echo "Computer is playing"
+			echo "Computer won the toss and will play first"
 			count=1;
 		fi
 }
@@ -89,7 +90,6 @@ function checkForRepeatedPosition() {
 }
 
 function playerMoves() {
-	echo "Player is playing"
 	currentPlayer=player
 	currentSymbol=$playerSymbol
 	read -p "Enter the position:" position
@@ -105,7 +105,6 @@ patt="^[0-9]$"
 }
 
 function computerMoves() {
-	echo "Computer Played"
 	currentPlayer=computer
 	currentSymbol=$computerSymbol
 	checkMovesForWinningPosition
@@ -233,6 +232,7 @@ function main() {
 		checkCorners
 		checkMiddle
 		dictTicTacToe[$position]=$currentSymbol
+		echo "$currentPlayer played and selected position:$position "
 		displayGame
 		checkWinner
 		checkForTie
