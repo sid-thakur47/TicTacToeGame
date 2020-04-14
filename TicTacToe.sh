@@ -228,18 +228,18 @@ function main() {
 	tossForPlayer
 	chooseSymbol
 	displayGame
-		while [[ $checkWinnerFlag -ne 0 ]]
-		do
-			getPlayerTurn
-			blocksPlayerPosition
-			checkCorners
-			checkMiddle
-			dictTicTacToe[$position]=$currentSymbol
-			echo "$currentPlayer played and selected position:$position "
-			displayGame
-			checkWinner
-			checkForTie
-			((switchPlayer++))
-		done
+	while [[ $checkWinnerFlag -ne 0 ]]
+	do
+		getPlayerTurn
+		blocksPlayerPosition
+		checkCorners
+		checkMiddle
+		dictTicTacToe[$position]=$currentSymbol
+		echo "$currentPlayer played and selected position:$position "
+		displayGame
+		checkWinner
+		checkForTie
+		((switchPlayer++))
+	done
 }
  main
