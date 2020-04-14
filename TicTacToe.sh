@@ -1,5 +1,7 @@
 #!/bin/bash
 
+shopt -s extglob
+
 declare -A dictTicTacToe
 
 LAST_POSITION=9
@@ -69,20 +71,20 @@ function getPlayerTurn() {
 	else 
 		computerMoves
 	fi
-	checkWinnerPosition
-		if [[ $checkWinnerPositionFlag  -eq 0 ]]
+	checkForRepeatedPosition
+		if [[ $checkReapetedFlag  -eq 0 ]]
 		then
 			getPlayerTurn
 		fi
 }
 
-function checkWinnerPosition() {
+function checkForRepeatedPosition() {
 	if [[ ${dictTicTacToe[$position]} == $computerSymbol ]] || [[ ${dictTicTacToe[$position]} == $playerSymbol ]]
 	then
-		checkWinnerPositionFlag=0
+		checkReapetedFlag=0
 		echo "Position is occupied please select other position:"
 	else
-		checkWinnerPositionFlag=1	
+		checkReapetedFlag=1	
 	fi
 }
 
@@ -91,6 +93,15 @@ function playerMoves() {
 	currentPlayer=player
 	currentSymbol=$playerSymbol
 	read -p "Enter the position:" position
+	checkCorrectInput
+}
+function checkCorrectInput() {
+patt="^[0-9]$"	
+	if [[ ! $position =~ $patt ]]
+	then
+		echo "Wrong input Please enter number from 0-9"
+		getPlayerTurn
+	fi
 }
 
 function computerMoves() {
