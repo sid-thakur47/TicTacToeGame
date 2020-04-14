@@ -9,7 +9,7 @@ LAST_POSITION=9
 blockingFlag=1
 checkWinnerFlag=1
 checkWinnerTie=0
-count=0
+switchPlayer=0
 arrRow=(1 4 7)
 arrColumn=(1 2 3)
 arrCorner=(1 3 7 9)
@@ -31,7 +31,7 @@ function chooseSymbol() {
 			playerSymbol=o
 			computerSymbol=x
 		fi
-	echo -e "\nplayer symbol is:$playerSymbol\nComputer symbol is:$computerSymbol\n"
+	echo -e "\nplayer symbol is:$playerSymbol\nComputer Symbol is $computerSymbol\n"
 }
 
 function displayGame() {
@@ -54,19 +54,19 @@ function displayGame() {
 function tossForPlayer() {
 	echo "Press Enter for toss:"
 	read key
-	rand=$(($((RANDOM%2))+1))
-		if [ $rand -eq 1 ]
+	toss=$(($((RANDOM%2))+1))
+		if [ $toss -eq 1 ]
 		then
 			echo "Player won the toss and will play first"
-			count=2;
+			switchPlayer=2;
 		else 
 			echo "Computer won the toss and will play first"
-			count=1;
+			switchPlayer=1;
 		fi
 }
 
 function getPlayerTurn() {
-	if [[ $count%2 -eq 0 ]]
+	if [[ $switchPlayer%2 -eq 0 ]]
 	then
 		playerMoves
 	else 
@@ -83,7 +83,7 @@ function checkForRepeatedPosition() {
 	if [[ ${dictTicTacToe[$position]} == $computerSymbol ]] || [[ ${dictTicTacToe[$position]} == $playerSymbol ]]
 	then
 		checkReapetedFlag=0
-		echo "Position is occupied please select other position:"
+		echo "$position is occupied please select other position:"
 	else
 		checkReapetedFlag=1	
 	fi
@@ -236,7 +236,7 @@ function main() {
 		displayGame
 		checkWinner
 		checkForTie
-		((count++))
+		((switchPlayer++))
 	done	
 }
  main
